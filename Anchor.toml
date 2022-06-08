@@ -1,0 +1,14 @@
+[features]
+seeds = false
+[programs.localnet]
+solana_gif_portal = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "localnet"
+wallet = "/home/supantha/.config/solana/id.json"
+
+[scripts]
+test = "node tests/solana_gif_portal.js"
