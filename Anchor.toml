@@ -1,13 +1,13 @@
 [features]
 seeds = false
-[programs.localnet]
-solana_gif_portal = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+[programs.devnet]
+solana_gif_portal = "6ciy83bMssvDG7TTZzSxb8aRT6F2QBM7rjodDZzH51mA"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "/home/supantha/.config/solana/id.json"
 
 [scripts]

@@ -1,13 +1,49 @@
 const anchor = require('@project-serum/anchor');
 
+// Need the system program, will talk about this soon.
+const { SystemProgram } = anchor.web3;
+
 const main = async() => {
   console.log("🚀 Starting test...")
 
-  anchor.setProvider(anchor.AnchorProvider.env());
+  const provider = anchor.AnchorProvider.env();
+  anchor.setProvider(provider);
+
   const program = anchor.workspace.SolanaGifPortal;
-  const tx = await program.rpc.startStuffOff();
+
+	// Create an account keypair for our program to use.
+  const baseAccount = anchor.web3.Keypair.generate();
+
+  // Call start_stuff_off, pass it the params it needs!
+  let tx = await program.rpc.startStuffOff({
+    accounts: {
+      baseAccount: baseAccount.publicKey,
+      user: provider.wallet.publicKey,
+      systemProgram: SystemProgram.programId,
+    },
+    signers: [baseAccount],
+  });
 
   console.log("📝 Your transaction signature", tx);
+
+  // Fetch data from the account.
+  let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+  console.log('👀 GIF Count', account.totalGifs.toString())
+
+	// You'll need to now pass a GIF link to the function! You'll also need to pass in the user submitting the GIF!
+  await program.rpc.addGif("https://media3.giphy.com/media/KBfKueAjIJV8Q/200w.webp?cid=ecf05e47nbsbnzf6uwjxrx3njwjj8n6321jhhodiadwqxcg7&rid=200w.webp&ct=g", {
+    accounts: {
+      baseAccount: baseAccount.publicKey,
+      user: provider.wallet.publicKey,
+    },
+  });
+  
+  // Call the account.
+  account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+  console.log('👀 GIF Count', account.totalGifs.toString())
+
+  // Access gif_list on the account!
+  console.log('👀 GIF List', account.gifList)
 }
 
 const runMain = async () => {
